@@ -15,36 +15,26 @@ def csv_process(csv_path, col_name, verbose = False):
     """
     data = pd.read_csv(csv_path)
 
-    data['의약품제형']=data['의약품제형'].astype('category')
-    data['제형코드명']=data['제형코드명'].astype('category')
+    data[col_name]=data[col_name].astype('category')
+    data[col_name]=data[col_name].cat.codes
 
-    data['모양코드']=data['의약품제형'].cat.codes
-    data['제형코드']=data['제형코드명'].cat.codes
+    dict_col = defaultdict(str)
 
-    dict_moyang = defaultdict(str)
-    dict_jehyung = defaultdict(str)
-
-    for a, b, c, d in zip(data['의약품제형'].value_counts().keys(), data['모양코드'].value_counts().keys(),\
-                            data['제형코드명'].value_counts().keys(), data['제형코드'].value_counts().keys()):
-        dict_moyang[b] = a 
-        dict_jehyung[d] = c
-    
+    for a, b in zip(data[col_name].value_counts().keys(), data[col_name].value_counts().keys()):
+        dict_col[b] = a 
+   
     train_labels = data[:14000].copy()
     train_labels.reset_index(inplace=True)
 
     test_labels = data[14000:].copy()
     test_labels.reset_index(inplace=True)
 
-    y1_train = train_labels['모양코드'][:11000]
-    y2_train = train_labels['제형코드'][:11000]
+    y_train = train_labels[col_name][:11000]
+    y_val = train_labels[col_name][11000:14000]
+    y_test = test_labels[col_name]
 
-    y1_val = train_labels['모양코드'][11000:14000]
-    y2_val = train_labels['제형코드'][11000:14000]
 
-    y1_test = test_labels['모양코드']
-    y2_test = test_labels['제형코드']
-
-    return y1_train, y2_train, y1_val, y2_val, y1_test, y2_test , dict_moyang, dict_jehyung
+    return (y_train, y_val, y_test, dict_col)
 
 def load_img(img_path, verbose=True):
     """
@@ -60,7 +50,7 @@ def load_img(img_path, verbose=True):
     for i in range(14000):
   
         try:
-            train_img.append(np.array(Image.open(path+'{}_f.jpg'.format(cnt)).resize((227,227)),dtype=np.float))
+            train_img.append(np.array(Image.open(img_path+'{}_f.jpg'.format(cnt)).resize((227,227)),dtype=np.float))
         except:
             train_img.append(np.zeros((227,227,3)))
     cnt += 1
@@ -72,10 +62,10 @@ def load_img(img_path, verbose=True):
 
     for i in range(4776):
 
-    try:
-        test_img.append(np.array(Image.open(path+'{}_f.jpg'.format(cnt)).resize((227,227)),dtype=np.float))
-    except:
-        test_img.append(np.zeros((227,227,3)))
+        try:
+            test_img.append(np.array(Image.open(img_path+'{}_f.jpg'.format(cnt)).resize((227,227)),dtype=np.float))
+        except:
+            test_img.append(np.zeros((227,227,3)))
 
     cnt += 1
     if i%200==0 and verbose:
@@ -86,7 +76,7 @@ def load_img(img_path, verbose=True):
 
     X_test = tf.convert_to_tensor(test_img)
 
-    return X_train, X_val, X_test
+    return (X_train, X_val, X_test)
 
     if __name__ == "__main__":
         y1_train, y1_test, y1_val, moyang_dict = csv_process('merged_med_4.csv', '의약품제형')
