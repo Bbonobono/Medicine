@@ -36,7 +36,7 @@ def csv_process(csv_path, col_name, verbose = False):
 
     return (y_train, y_val, y_test, dict_col)
 
-def load_img(img_path, verbose=True):
+def load_img(img_path, img_size=227, verbose=True):
     """
         train img, val img, test img 생성
         input : img_path
@@ -50,26 +50,26 @@ def load_img(img_path, verbose=True):
     for i in range(14000):
   
         try:
-            train_img.append(np.array(Image.open(img_path+'{}_f.jpg'.format(cnt)).resize((227,227)),dtype=np.float))
+            train_img.append(np.array(Image.open(img_path+'{}_f.jpg'.format(cnt)).resize((img_size,img_size)),dtype=np.float))
         except:
-            train_img.append(np.zeros((227,227,3)))
-    cnt += 1
+            train_img.append(np.zeros((img_size,img_size,3)))
+        cnt += 1
 
-    if i%600==0 and verbose:
-        print(i,' Train Done')
+        if i%600==0 and verbose:
+            print(i,' Train Done')
 
     test_img = list()
 
     for i in range(4776):
 
         try:
-            test_img.append(np.array(Image.open(img_path+'{}_f.jpg'.format(cnt)).resize((227,227)),dtype=np.float))
+            test_img.append(np.array(Image.open(img_path+'{}_f.jpg'.format(cnt)).resize((img_size,img_size)),dtype=np.float))
         except:
-            test_img.append(np.zeros((227,227,3)))
+            test_img.append(np.zeros((img_size,img_size,3)))
 
-    cnt += 1
-    if i%200==0 and verbose:
-        print(i,' Test Done')
+        cnt += 1
+        if i%200==0 and verbose:
+            print(i,' Test Done')
 
     X_train = tf.convert_to_tensor(train_img[:11000])
     X_val = tf.convert_to_tensor(train_img[11000:14000])
