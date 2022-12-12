@@ -11,7 +11,7 @@ def crop_save(_img):
     origin = img.copy()
     
     # morphology
-    kernel = np.ones((10,10),np.uint8)
+    kernel = np.ones((5,5),np.uint8)
     mor_img = cv2.morphologyEx (img, cv2.MORPH_OPEN, kernel)
     
     # edge detecting
