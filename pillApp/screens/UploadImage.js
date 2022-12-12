@@ -5,6 +5,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { Camera, CameraType, takePictureAsync } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 
+
+// }
 // import { MobileModel } from 'react-native-pytorch-core';
 const UploadImage = ({route, navigation}) => {
   const pressHandler = () => {
@@ -19,8 +21,8 @@ const UploadImage = ({route, navigation}) => {
  
 
   // Image Upload
-  
   const [hasPermission, setHasPermission] = useState(null);
+  const [hasCamPermission, setHasCamPermission] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [type, setType] = useState(CameraType.back);
   const [images, setImage] = useState(null);
@@ -31,16 +33,29 @@ const UploadImage = ({route, navigation}) => {
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasCamPermission(status === 'granted');
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
   }, []);
 
+  if (hasCamPermission === null) {
+    return <View />;
+  }
+  if (hasCamPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
   if (hasPermission === null) {
     return <View />;
-    // return  <Text>test</Text>;
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return <Text>No access to MediaLibrary</Text>;
   }
 
   // useEffect(() => {
@@ -107,6 +122,8 @@ const UploadImage = ({route, navigation}) => {
   //     console.log(photo);
   // } 
 
+
+
   const takePhoto = async() => {
     if (cameraRef) {
       console.log("in take picture");
@@ -172,7 +189,7 @@ const UploadImage = ({route, navigation}) => {
             style={cam_styles.button}
             onPress={async() => {
               const r = await takePhoto();
-              setImage(r.uri)
+              setImage(r?.uri)
               setShowCamera(false)
               // Alert.alert("DEBUG", JSON.stringify(r));
               // navigation.navigate('UploadImage',{'img':r})
@@ -318,6 +335,8 @@ const UploadImage = ({route, navigation}) => {
     
   );
 }
+
+
 const cam_styles = StyleSheet.create({
   container: {
     flex: 1,
