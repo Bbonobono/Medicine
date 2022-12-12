@@ -126,13 +126,36 @@ const UploadImage = ({route, navigation}) => {
   return (
     <View style={{flex:1}}>
       {showCamera ? (<Camera style={{flex: 1,}} type={type} ref={cameraRef}>
+        
         <View style={cam_styles.buttonContainer}>
+        <View style = {
+            { 
+              "flexDirection": "row",
+              "alignSelf": "flex-end",
+              "alignItems": "center",
+              "paddingTop": 5,
+              "width": 390,
+              "height": 100,
+              "backgroundColor": "rgba(255, 255, 255, 255)"
+            }
+          } >
           <TouchableOpacity
             style={cam_styles.button}
             onPress={() => {
               setType(type === CameraType.back ? CameraType.front : CameraType.back);
             }}>
-            <Text style={cam_styles.buttonText}> Flip </Text>
+            
+            <Image style = {
+            {
+              "width": 24,
+              "height": 24,
+              "marginBottom":60,
+              "marginLeft":50
+            }
+            }
+            source = {
+              require('../assets/circle.png')
+            }/>
           </TouchableOpacity>
           <TouchableOpacity
             style={cam_styles.button}
@@ -144,27 +167,134 @@ const UploadImage = ({route, navigation}) => {
               // navigation.navigate('UploadImage',{'img':r})
             }}
             >
-            <Text style={cam_styles.buttonText}> Photo </Text>
+            <View style = {
+              {
+                "alignItems": "center",
+                "paddingTop": 9,
+                "marginBottom":50,
+                "width": 100,
+                "height": 42,
+                "borderRadius": 21,
+                "backgroundColor": "rgba(67, 175, 244, 255)"
+              }
+            } >
+            <Image style = {
+            {
+              "width": 24,
+              "height": 24,
+              "marginBottom":60
+            }
+            }
+            source = {
+              require('../assets/camera.png')
+            }/>
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={cam_styles.button}
             onPress={async() => {
               setShowCamera(false);
             }}>
-            <Text style={cam_styles.buttonText}> Cancel </Text>
+            <Image style = {
+            {
+              "width": 24,
+              "height": 24,
+              "marginBottom":60,
+              "marginRight":50
+            }
+            }
+            source = {
+              require('../assets/back.png')
+            }/>
           </TouchableOpacity>
+        </View>
         </View>
       </Camera>
       ) : (
       <View style={styles.container}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Button title = 'TAKE PICTURE' onPress={() => setShowCamera(true)} />
-          <Button title="SELECT IMAGE" onPress={pickImage} />
+        <Image style = {
+        {
+          // "marginStart": 20,
+          "width": 180,
+          "height": 101.25
+        }
+        }
+        source = {
+            require('../assets/pillm.png')
+        }/>
+          <TouchableOpacity onPress={() => setShowCamera(true)}>
+            <View style = {
+              {
+                "alignItems": "center",
+                "paddingTop": 12,
+                "margin":20,
+                "width": 212,
+                "height": 42,
+                "borderRadius": 21,
+                "backgroundColor": "rgba(67, 175, 244, 255)"
+              }
+            } >
+            
+            <Text style = {
+              {
+                "fontFamily": "NanumSquareOTF",
+                "fontSize": 16,
+                "textAlign": "center",
+                "color": "rgba(255, 255, 255, 255)"
+              }
+            } >Take Picture</Text>
+            </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={pickImage}>
+            <View style = {
+              {
+                "alignItems": "center",
+                "paddingTop": 12,
+                "margin":3,
+                "width": 212,
+                "height": 42,
+                "borderRadius": 21,
+                "backgroundColor": "rgba(67, 175, 244, 255)"
+              }
+            } >
+            <Text style = {
+              {
+                "fontFamily": "NanumSquareOTF",
+                "fontSize": 16,
+                "textAlign": "center",
+                "color": "rgba(255, 255, 255, 255)"
+              }
+            } >Select Image</Text>
+            </View>
+            </TouchableOpacity>
           {images && <Image source={{ uri: images }} style={{ width: 350, height: 350 }} onLoadEnd={() => alert('Image Loaded!!')} resizeMethod='contain'/>}
           
         </View>
         <View style={{marginBottom:30}}>
-          <Button title='SUBMIT' onPress={pressHandler1}/>
+        <TouchableOpacity onPress={pressHandler1}>
+          <View style = {
+            {
+              "alignItems": "center",
+              "paddingTop": 12,
+              "margin":20,
+              "width": 212,
+              "height": 42,
+              "borderRadius": 21,
+              "backgroundColor": "rgba(70, 83, 107, 255)"
+            }
+          } >
+          
+          <Text style = {
+            {
+              "fontFamily": "NanumSquareOTF",
+              "fontSize": 16,
+              "textAlign": "center",
+              "color": "rgba(255, 255, 255, 255)"
+            }
+          } >Submit</Text>
+          </View>
+          </TouchableOpacity>
         </View>
       </View>
       )}
@@ -184,7 +314,7 @@ const cam_styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
     flexDirection: 'row',
-    margin: 50,
+    margin: 0,
   },
   button: {
     flex: 1,

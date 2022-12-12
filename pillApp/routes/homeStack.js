@@ -10,11 +10,11 @@ const Stack = createStackNavigator();
 export default function HomeStack() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Home" component={Home} options={{headerShown : false,}} />
-            <Stack.Screen name="UploadImage" component={UploadImage} options={{title:'Upload'}} />
-            <Stack.Screen name="Result" component={Result}/>
+            {/* <Stack.Screen name="Home" component={Home} options={{headerShown : false,}} /> */}
+            <Stack.Screen name="UploadImage" component={UploadImage} options={{headerShown : false,}} />
+            <Stack.Screen name="Result" component={Result} options={{headerShown : false,}}/>
             
-            <Stack.Screen name="Detail" component={Detail}/>
+            <Stack.Screen name="Detail" component={Detail} options={{headerShown : false,}}/>
         </Stack.Navigator>
     );
 }
