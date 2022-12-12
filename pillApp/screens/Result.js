@@ -1,8 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Pressable, Image } from 'react-native';
-import * as SQLite from 'expo-sqlite'
-
 
 
 // const pills = [
@@ -19,13 +17,13 @@ import * as SQLite from 'expo-sqlite'
 
 const pills = [
   {
-    id: 1,
-    name: "엘스테인캡슐",
-    shape: "장방형",
-    color: "초록",
-    image: "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/1Mxwka5v1Ov",
-    effect: '급ㆍ만성 호흡기질환에서의 점액용해 및 거담',
-    usage: '성인: 에르도스테인으로서 1회 300 mg을 1일 2～3회 경구투여한다.\n급성 호흡기질환에 투여 시 연속으로 10일 이상 투여하지 않는다.',
+    'id': 1,
+    'name': "엘스테인캡슐",
+    'shape': "장방형",
+    'color': "초록",
+    'image': "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/1Mxwka5v1Ov",
+    'effect': '급ㆍ만성 호흡기질환에서의 점액용해 및 거담',
+    'usage': '성인: 에르도스테인으로서 1회 300 mg을 1일 2～3회 경구투여한다.\n급성 호흡기질환에 투여 시 연속으로 10일 이상 투여하지 않는다.',
   },
   // {
   //   id: 2,
@@ -57,39 +55,19 @@ export default function Result({navigation}) {
     
     
     const [isLoading, setLoading] = useState(false);
-    const [data, setData] = useState([]);
-    
+    const [data, setData] = useState({});
+
     useEffect(() => {
-      const db = SQLite.openDatabaseIShipWithApp('../assets/www/medicine_db.db')
-      // db.transaction(tx => {
-      //   tx.executeSql('CREATE TABLE IF NOT EXISTS T_Medicine (pk INTEGER NOT NULL, name TEXT, content_url TEXT)')
-      // })
-      db.transaction(tx => {
-        tx.executeSql(
-          "SELECT * FROM `T_Medicine`",[],
-          (txObj, resultSet) => {
-            // setData(resultSet.rows._array)
-            console.log(resultSet.rows._array)
-            console.log('item:', resultSet.rows.length);
-          },
-          (txObj, error) => console.log(error)
-        );
-      });
-    }, []);
-
+      fetch('http://172.30.1.20:8000/',{
+        Accept: 'application/json',
+      })
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+    },[])
     
-
-    // useEffect(() => {
-    //   fetch('http://172.30.1.60:5000/result',{
-    //     Accept: 'application/json',
-    //   })
-    //   .then((response) => response.json())
-    //   .then((json) => setData(json.result))
-    //   .catch((error) => console.error(error))
-    //   .finally(() => setLoading(false));
-    // },[])
-    
-    const ListItem = ({item, name, shape, color, image, onPress}) => {
+    const ListItem = ({item, name, shape, color, image}) => {
       return (
         <Pressable style={styles.listItem} onPress={() => DetailPage(item)}>
           <View style={styles.pillContainer}>
@@ -114,7 +92,7 @@ export default function Result({navigation}) {
             marginTop: 20,
           }}
         >
-          <Text style={{marginLeft: 20,fontSize: 20}}>총 <Text style={{fontWeight: 'bold', fontSize: '30', color:'#3478F6'}}>{pills.length}</Text>건의 검색결과가 있습니다.</Text>
+          <Text style={{marginLeft: 20,fontSize: 20}}>총 <Text style={{fontWeight: 'bold', fontSize: '30', color:'#3478F6'}}>{data.length}</Text>건의 검색결과가 있습니다.</Text>
         </View>
           
       )
@@ -123,18 +101,18 @@ export default function Result({navigation}) {
       <View>
         {isLoading ? <Text>Loading...</Text> :
         (<FlatList
-          data={pills}
+          data={data}
           ListHeaderComponent={ListHeaderComponent}
           renderItem={({item}) => {
             return <ListItem 
                       item = {item}
-                      name = {item.name}
-                      shape = {item.shape}
-                      color = {item.color}
-                      image = {item.image}
+                      name = {item.NAME}
+                      shape = {item.MY}
+                      color = {item.COLOR}
+                      image = {item.IMAGE}
                     />;
           }}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.PK}
         />)}
       </View>
     );
@@ -149,14 +127,16 @@ export default function Result({navigation}) {
     },
     listImage: {
       width: 120,
-      height: 90,
+      height: '100%',
       borderRadius: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     listItem:{
-      height : 120,
+      height : '100%',
       marginBottom: 1,
       paddingHorizontal: 15,
-      
+      // flex: 1,
     },
     pillContainer: {
       flexDirection: 'row',
@@ -164,11 +144,13 @@ export default function Result({navigation}) {
       padding: 10,
       borderRadius: 10,
       backgroundColor: '#fff',
+      // flex: 1,
     },
     pillContent:{
       marginLeft: 20,
-      marginRight: 20,
+      // marginRight: 20,
       justifyContent:'center',
-      overflow: 'hidden',
+      overflow: 'visible',
+      flex: 1,
     },
   });

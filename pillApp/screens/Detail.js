@@ -14,10 +14,10 @@ export default function Detail({route, navigation}) {
     return (
       <ScreenContainer>
         <PillsDetail 
-          name = {pillItem.pillItem.name}
-          effect = {pillItem.pillItem.effect}
-          usage = {pillItem.pillItem.usage}
-          image = {pillItem.pillItem.image}
+          name = {pillItem.pillItem.NAME}
+          effect = {pillItem.pillItem.EFFECT}
+          usage = {pillItem.pillItem.USAGE}
+          image = {pillItem.pillItem.IMAGE}
           style={styles.listItem}
         />
       </ScreenContainer>
