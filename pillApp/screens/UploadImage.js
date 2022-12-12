@@ -251,7 +251,7 @@ const UploadImage = ({route, navigation}) => {
               {
                 "alignItems": "center",
                 "paddingTop": 12,
-                "margin":3,
+                "margin":0,
                 "width": 212,
                 "height": 42,
                 "borderRadius": 21,
@@ -268,7 +268,11 @@ const UploadImage = ({route, navigation}) => {
             } >Select Image</Text>
             </View>
             </TouchableOpacity>
-          {images && <Image source={{ uri: images }} style={{ width: 350, height: 350 }} onLoadEnd={() => alert('Image Loaded!!')} resizeMethod='contain'/>}
+          {images && <Image source={{ uri: images }} style={{ 
+            marginTop: 20,
+            width: 350, 
+            height: 350,
+            borderRadius: 30 }} onLoadEnd={() => alert('Image Loaded!!')} resizeMethod='contain'/>}
           
         </View>
         <View style={{marginBottom:30}}>
