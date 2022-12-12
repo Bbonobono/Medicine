@@ -37,6 +37,7 @@ const UploadImage = ({route, navigation}) => {
 
   if (hasPermission === null) {
     return <View />;
+    // return  <Text>test</Text>;
   }
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
@@ -95,6 +96,16 @@ const UploadImage = ({route, navigation}) => {
     }
     
   };
+
+  // takePicture = () => {
+  //   if (this.camera) {
+  //       this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
+  //     }
+  // };
+
+  // onPictureSaved = photo => {
+  //     console.log(photo);
+  // } 
 
   const takePhoto = async() => {
     if (cameraRef) {
