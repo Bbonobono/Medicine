@@ -300,7 +300,7 @@ const UploadImage = ({route, navigation}) => {
             marginTop: 20,
             width: 350, 
             height: 350,
-            borderRadius: 30 }} onLoadEnd={() => alert('Image Loaded!!')} resizeMethod='contain'/>}
+            borderRadius: 30 }} resizeMethod='contain'/>}
           
         </View>
         <View style={{marginBottom:30}}>
