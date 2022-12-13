@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Button, Image, Alert, TouchableOpacity, Text} from 'react-native'
+import { StyleSheet, View, Button, Image, Alert, TouchableOpacity, Text, ScrollView} from 'react-native'
 import * as ImagePicker from 'expo-image-picker';
 import { Camera, CameraType, takePictureAsync } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
-
+import ImageView from "react-native-image-viewing";
 
 // }
 // import { MobileModel } from 'react-native-pytorch-core';
@@ -25,7 +25,8 @@ const UploadImage = ({route, navigation}) => {
   const [hasCamPermission, setHasCamPermission] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [type, setType] = useState(CameraType.back);
-  const [images, setImage] = useState(null);
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
   // camera ref to access camera
   const cameraRef = useRef(null);
 
@@ -73,7 +74,9 @@ const UploadImage = ({route, navigation}) => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
+      allowsMultipleSelection: true,
+      selectionLimit: 2,
+      // allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
@@ -87,7 +90,14 @@ const UploadImage = ({route, navigation}) => {
     // console.log("image pick in Library: ", result.assets);
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      if (result.assets.length == 1){
+        setImage1(result.assets[0].uri);
+      }
+      else{
+        setImage1(result.assets[0].uri);
+        setImage2(result.assets[1].uri);
+      }
+      
       
     //   let res = await fetch(
     //     'http://172.30.1.60:5000/image', {
@@ -189,7 +199,7 @@ const UploadImage = ({route, navigation}) => {
             style={cam_styles.button}
             onPress={async() => {
               const r = await takePhoto();
-              setImage(r?.uri)
+              setImage1(r?.uri)
               setShowCamera(false)
               // Alert.alert("DEBUG", JSON.stringify(r));
               // navigation.navigate('UploadImage',{'img':r})
@@ -296,13 +306,11 @@ const UploadImage = ({route, navigation}) => {
             } >Select Image</Text>
             </View>
             </TouchableOpacity>
-          {images && <Image source={{ uri: images }} style={{ 
-            marginTop: 20,
-            width: 350, 
-            height: 350,
-            borderRadius: 30 }} resizeMethod='contain'/>}
-          
         </View>
+        {image1 && <ScrollView style = {{height: 10, marginLeft: 40, marginRight: 40}} horizontal={true}>
+          <Image source={{ uri: image1 }} style={styles.img_style} onLoadEnd={() => alert('Image Loaded')} resizeMethod='contain'/>
+          {image2 && <Image source={{ uri: image2 }} style={styles.img_style} resizeMethod='contain'/>}
+        </ScrollView>}
         <View style={{marginBottom:30}}>
         <TouchableOpacity onPress={pressHandler1}>
           <View style = {
@@ -368,7 +376,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 80,
   },
+  img_style: { 
+    // marginTop: 20,
+    width: 300, 
+    height: 300,
+    borderRadius: 30 }
 });
 
 export default UploadImage;
