@@ -5,9 +5,6 @@ import PillsDetail from '../components/PillsDetail';
 import ScreenContainer from '../components/ScreenContainer';
 
 export default function Detail({route, navigation}) {
-    const pressHandler = () => {
-      navigation.goBack();
-    }
     const pillItem = route.params;
     console.log(pillItem);
 

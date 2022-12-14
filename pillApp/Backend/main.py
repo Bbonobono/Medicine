@@ -20,7 +20,8 @@ pk_num = 5
 
 @app.get("/")
 async def root():
-    query = engine.execute(select(med).where(med.c.PK == pk_num)).fetchone()
+    query = engine.execute(select(med).where(med.c.PK == pk_num)).fetchall()
+    print(query)
     info_query = engine.execute(select(info).where(info.c.PK == pk_num)).fetchone()
 
     shape = engine.execute(select(my).where(my.c.PK == query.MY)).fetchone()
@@ -30,4 +31,4 @@ async def root():
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="172.30.1.20", port=8000, reload=True)
+    uvicorn.run("main:app", host="172.30.1.51", port=8000, reload=True) # host : ipconfig해서 IPv4 주소로 변경

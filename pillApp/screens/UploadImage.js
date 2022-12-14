@@ -4,14 +4,9 @@ import { StyleSheet, View, Button, Image, Alert, TouchableOpacity, Text, ScrollV
 import * as ImagePicker from 'expo-image-picker';
 import { Camera, CameraType, takePictureAsync } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
-import ImageView from "react-native-image-viewing";
+import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from 'react-native-popup-menu';
 
-// }
-// import { MobileModel } from 'react-native-pytorch-core';
 const UploadImage = ({route, navigation}) => {
-  const pressHandler = () => {
-    navigation.goBack();
-  }
   const pressHandler1 = () => {
     navigation.navigate('Result');
   }
@@ -27,6 +22,8 @@ const UploadImage = ({route, navigation}) => {
   const [type, setType] = useState(CameraType.back);
   const [image1, setImage1] = useState(null);
   const [image2, setImage2] = useState(null);
+  const [hasimage, setHasImage] = useState(false);
+  const [whatImage, setWhatImage] = useState(null);
   // camera ref to access camera
   const cameraRef = useRef(null);
 
@@ -70,13 +67,11 @@ const UploadImage = ({route, navigation}) => {
   //     })
   // },[])
 
-  const pickImage = async () => {
+  const pickImage1 = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
-      selectionLimit: 2,
-      // allowsEditing: true,
+      allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
@@ -90,15 +85,8 @@ const UploadImage = ({route, navigation}) => {
     // console.log("image pick in Library: ", result.assets);
 
     if (!result.canceled) {
-      if (result.assets.length == 1){
-        setImage1(result.assets[0].uri);
-      }
-      else{
-        setImage1(result.assets[0].uri);
-        setImage2(result.assets[1].uri);
-      }
-      
-      
+      setImage1(result.assets[0].uri)   
+      setHasImage(true)
     //   let res = await fetch(
     //     'http://172.30.1.60:5000/image', {
     //       method: 'POST',
@@ -119,27 +107,27 @@ const UploadImage = ({route, navigation}) => {
     //     setImage(responseData.uri)
     //   })
     }
+  };
+  const pickImage2 = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setImage2(result.assets[0].uri)
+      setHasImage(true)
+    }
     
   };
-
-  // takePicture = () => {
-  //   if (this.camera) {
-  //       this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
-  //     }
-  // };
-
-  // onPictureSaved = photo => {
-  //     console.log(photo);
-  // } 
-
-
-
   const takePhoto = async() => {
     if (cameraRef) {
       console.log("in take picture");
       try {
         let photo = await cameraRef.current.takePictureAsync({
-          allowsEditing: true,
+          forceUpOrientation: true,
           aspect: [4,3],
           quality: 1,
         });
@@ -150,16 +138,6 @@ const UploadImage = ({route, navigation}) => {
       }
     }
   };
-
-  //   if (route.params){
-  //     const img = route.params;
-  //     // console.log("img: ",img)
-  //     setImage(img.uri);
-  //     console.log(img.uri)
-
-  //     console.log(images)
-  //   }
-  // });
 
   return (
     <View style={{flex:1}}>
@@ -199,10 +177,16 @@ const UploadImage = ({route, navigation}) => {
             style={cam_styles.button}
             onPress={async() => {
               const r = await takePhoto();
-              setImage1(r?.uri)
-              setShowCamera(false)
-              // Alert.alert("DEBUG", JSON.stringify(r));
-              // navigation.navigate('UploadImage',{'img':r})
+              if (whatImage == "Front") {
+                setImage1(r?.uri)
+                setHasImage(true)
+                setShowCamera(false)
+              }
+              else{
+                setImage2(r?.uri)
+                setHasImage(true)
+                setShowCamera(false)
+              }
             }}
             >
             <View style = {
@@ -251,91 +235,143 @@ const UploadImage = ({route, navigation}) => {
       ) : (
       <View style={styles.container}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Image style = {
-        {
-          // "marginStart": 20,
-          "width": 180,
-          "height": 101.25
-        }
-        }
-        source = {
-            require('../assets/pillm.png')
-        }/>
-          <TouchableOpacity onPress={() => setShowCamera(true)}>
-            <View style = {
+            <MenuProvider style={styles.menu_style}>
+              <Image style = {
               {
-                "alignItems": "center",
-                "paddingTop": 12,
-                "margin":20,
-                "width": 212,
-                "height": 42,
-                "borderRadius": 21,
-                "backgroundColor": "rgba(67, 175, 244, 255)"
+                // "marginStart": 20,
+                "width": 180,
+                "height": 101.25,
+                "marginBottom": 20
               }
-            } >
-            
-            <Text style = {
-              {
-                "fontFamily": "NanumSquareOTF",
-                "fontSize": 16,
-                "textAlign": "center",
-                "color": "rgba(255, 255, 255, 255)"
               }
-            } >Take Picture</Text>
-            </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={pickImage}>
-            <View style = {
-              {
-                "alignItems": "center",
-                "paddingTop": 12,
-                "margin":0,
-                "width": 212,
-                "height": 42,
-                "borderRadius": 21,
-                "backgroundColor": "rgba(67, 175, 244, 255)"
-              }
-            } >
-            <Text style = {
-              {
-                "fontFamily": "NanumSquareOTF",
-                "fontSize": 16,
-                "textAlign": "center",
-                "color": "rgba(255, 255, 255, 255)"
-              }
-            } >Select Image</Text>
-            </View>
-            </TouchableOpacity>
+              source = {
+                  require('../assets/pillm.png')
+              }/>
+              <Menu style={{marginBottom: 20,}}>
+                <MenuTrigger style={{
+                    backgroundColor:"rgba(67, 175, 244, 255)",
+                    width:212,
+                    height:42,
+                    borderRadius: 21,
+                    justifyContent:'center',
+                    margin:0,
+                    alignItems:'center',
+                  }}>
+                  <Text style={{color: 'white'}}>
+                    TAKE PICTURES
+                  </Text>
+                </MenuTrigger>
+                <MenuOptions
+                  optionsContainerStyle={{
+                    borderRadius: 10,
+                    marginTop:-30,
+                    backgroundColor:'#F3F5F7',
+                    marginLeft:15,
+                  }}
+                >
+                  <MenuOption 
+                    onSelect={() => {setShowCamera(true); setWhatImage('Front')}} 
+                    text="Front Image" 
+                    customStyles={{
+                      optionWrapper: {height: 30, marginLeft: 5, marginRight: 5, marginTop: 5, marginBottom: 1},
+                      optionText: {fontSize: 16},
+                    }}
+                  />
+                  <View style={styles.divider} />
+                  <MenuOption
+                    onSelect={() => {setShowCamera(true); setWhatImage('Back')}}
+                    text="Back Image"
+                    customStyles={{
+                      optionWrapper: {height: 30, marginLeft: 5, marginRight: 5, marginTop: 5, marginBottom: 1},
+                      optionText: {fontSize: 16},
+                    }}
+                  />
+                </MenuOptions>
+              </Menu>
+
+              <Menu>
+                <MenuTrigger style={{
+                    backgroundColor:"rgba(67, 175, 244, 255)",
+                    width:212,
+                    height:42,
+                    borderRadius: 21,
+                    justifyContent:'center',
+                    margin:0,
+                    alignItems:'center',
+                  }}>
+                  <Text style={{color: 'white'}}>
+                    SELECT IMAGES
+                  </Text>
+                </MenuTrigger>
+                <MenuOptions
+                  optionsContainerStyle={{
+                    borderRadius: 10,
+                    marginTop:-30,
+                    backgroundColor:'#F3F5F7',
+                    marginLeft:15,
+                  }}
+                >
+                  <MenuOption 
+                    onSelect={pickImage1}
+                    text="Front Image" 
+                    customStyles={{
+                      optionWrapper: {height: 30, marginLeft: 5, marginRight: 5, marginTop: 5, marginBottom: 1},
+                      optionText: {fontSize: 16},
+                    }}
+                  />
+                  <View style={styles.divider} />
+                  <MenuOption
+                    onSelect={pickImage2}
+                    text="Back Image"
+                    customStyles={{
+                      optionWrapper: {height: 30, marginLeft: 5, marginRight: 5, marginTop: 5, marginBottom: 1},
+                      optionText: {fontSize: 16},
+                    }}
+                  />
+                </MenuOptions>
+              </Menu>
+            </MenuProvider>
         </View>
-        {image1 && <ScrollView style = {{height: 10, marginLeft: 40, marginRight: 40}} horizontal={true}>
-          <Image source={{ uri: image1 }} style={styles.img_style} onLoadEnd={() => alert('Image Loaded')} resizeMethod='contain'/>
+        {hasimage && <ScrollView style = {{height: 10, marginLeft: 40, marginRight: 40}} horizontal={true}>
+          {image1 && <Image source={{ uri: image1 }} style={styles.img_style} resizeMethod='contain'/>}
           {image2 && <Image source={{ uri: image2 }} style={styles.img_style} resizeMethod='contain'/>}
         </ScrollView>}
-        <View style={{marginBottom:30}}>
-        <TouchableOpacity onPress={pressHandler1}>
+        {hasimage &&<View style={{marginBottom:30, flex: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+        <TouchableOpacity style={{flex: 1, alignItems:'flex-end'}} onPress={() => {setImage1(null); setImage2(null); setHasImage(false); setWhatImage(null)}}>
           <View style = {
             {
               "alignItems": "center",
-              "paddingTop": 12,
+              "justifyContent":"center",
               "margin":20,
-              "width": 212,
-              "height": 42,
-              "borderRadius": 21,
-              "backgroundColor": "rgba(70, 83, 107, 255)"
+              "width": 106,
+              "height": 50,
+              "borderRadius": 15,
+              "backgroundColor": "rgba(70, 83, 107, 255)",
             }
           } >
           
-          <Text style = {
-            {
-              "fontFamily": "NanumSquareOTF",
-              "fontSize": 16,
-              "textAlign": "center",
-              "color": "rgba(255, 255, 255, 255)"
-            }
-          } >Submit</Text>
+          <Text style = {[styles.button_style], {color: 'white', fontWeight: 'bold'}} >RESET</Text>
           </View>
-          </TouchableOpacity>
+        </TouchableOpacity>
+        <TouchableOpacity style={{flex: 1, alignItems:'flex-start'}} onPress={pressHandler1}>
+          <View style = {
+            {
+              "alignItems": "center",
+              "justifyContent":"center",
+              "margin":20,
+              "width": 106,
+              "height": 50,
+              "borderRadius": 15,
+              "backgroundColor": "rgba(70, 83, 107, 255)",
+            }
+          } >
+          
+          <Text style = {[styles.button_style], {color: 'white', fontWeight: 'bold'}} >SUBMIT</Text>
+          </View>
+        </TouchableOpacity>
         </View>
+        }
+        
       </View>
       )}
       
@@ -382,7 +418,30 @@ const styles = StyleSheet.create({
     // marginTop: 20,
     width: 300, 
     height: 300,
-    borderRadius: 30 }
+    borderRadius: 30,
+    marginLeft: 5,
+  },
+  button_style: {
+    fontFamily: "NanumSquareOTF",
+    fontSize: 16,
+    textAlign: "center",
+    color: "rgba(255, 255, 255, 255)",
+  },
+  menu_style:{
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    // marginVertical: 100,
+    marginHorizontal: 100,
+    // flexDirection: "column",
+    // borderRadius: 30,
+    paddingBottom: 30,
+  },
+  divider: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: "#7F8487",
+  },
 });
 
 export default UploadImage;

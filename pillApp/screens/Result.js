@@ -1,54 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Pressable, Image } from 'react-native';
-
-
-// const pills = [
-//   {
-//     id: 1,
-//     name: "엘스테인캡슐",
-//     shape: "장방형",
-//     color: "초록",
-//     image: "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/1Mxwka5v1Ov",
-//     effect: '급ㆍ만성 호흡기질환에서의 점액용해 및 거담',
-//     usage: '성인: 에르도스테인으로서 1회 300 mg을 1일 2～3회 경구투여한다.\n급성 호흡기질환에 투여 시 연속으로 10일 이상 투여하지 않는다.',
-//   },
-// ];
-
-const pills = [
-  {
-    'id': 1,
-    'name': "엘스테인캡슐",
-    'shape': "장방형",
-    'color': "초록",
-    'image': "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/1Mxwka5v1Ov",
-    'effect': '급ㆍ만성 호흡기질환에서의 점액용해 및 거담',
-    'usage': '성인: 에르도스테인으로서 1회 300 mg을 1일 2～3회 경구투여한다.\n급성 호흡기질환에 투여 시 연속으로 10일 이상 투여하지 않는다.',
-  },
-  // {
-  //   id: 2,
-  //   name: "그린엠캡슐",
-  //   shape: "장방형",
-  //   color: "초록",
-  //   image: "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/147428243808800017",
-  //   effect: '비만 또는 과체중시 체중감량(줄임) 보조제',
-  //   usage: '성인 : 1회 1 ∼ 2캡슐, 1일 3회 식사 중에 큰 컵으로 물 한 컵과 함께 복용한다.',
-  // },
-  // {
-  //   id: 3,
-  //   name: "뉴에르도테캡슐",
-  //   shape: "장방형",
-  //   color: "초록",
-  //   image: "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/148362082166500066",
-  //   effect: '급ㆍ만성 호흡기질환에서의 점액용해 및 거담',
-  //   usage: '성인: 에르도스테인으로서 1회 300 mg을 1일 2～3회 경구투여한다.\n급성 호흡기질환에 투여 시 연속으로 10일 이상 투여하지 않는다.',
-  // },
-];
+import { StyleSheet, Text, View, FlatList, Pressable, Image, SafeAreaView } from 'react-native';
 
 export default function Result({navigation}) {
-    const pressHandler = () => {
-      navigation.goBack();
-    }
     const DetailPage = (props) => {
         navigation.navigate('Detail',{'pillItem':props});
     };
@@ -58,7 +12,7 @@ export default function Result({navigation}) {
     const [data, setData] = useState({});
 
     useEffect(() => {
-      fetch('http://172.30.1.20:8000/',{
+      fetch('http://172.30.1.51:8000/',{ // fast api 주소 따라서 변경해야함.
         Accept: 'application/json',
       })
       .then((response) => response.json())
@@ -98,7 +52,7 @@ export default function Result({navigation}) {
       )
     };
     return (
-      <View>
+      <SafeAreaView>
         {isLoading ? <Text>Loading...</Text> :
         (<FlatList
           data={data}
@@ -114,7 +68,7 @@ export default function Result({navigation}) {
           }}
           keyExtractor={item => item.PK}
         />)}
-      </View>
+      </SafeAreaView>
     );
   }
   
