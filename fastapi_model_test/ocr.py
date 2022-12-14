@@ -26,8 +26,8 @@ def ocr(img, form, path=None):
         pass
 
     kernel = np.ones((15,15), np.uint8)
-
-    if '캡슐' in form:
+    if form == 0 or 2:
+    # if '캡슐' in form:
         img = cv2.fastNlMeansDenoising(img, None, 15, 7, 21)
         img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                     cv2.THRESH_BINARY, 11, 2)
