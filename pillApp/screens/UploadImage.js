@@ -337,36 +337,46 @@ const UploadImage = ({route, navigation}) => {
           {image2 && <Image source={{ uri: image2 }} style={styles.img_style} resizeMethod='contain'/>}
         </ScrollView>}
         {hasimage &&<View style={{marginBottom:30, flex: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-        <TouchableOpacity style={{flex: 1, alignItems:'flex-end'}} onPress={() => {setImage1(null); setImage2(null); setHasImage(false); setWhatImage(null)}}>
+        <TouchableOpacity onPress={() => {setImage1(null); setImage2(null); setHasImage(false); setWhatImage(null)}}>
           <View style = {
             {
               "alignItems": "center",
               "justifyContent":"center",
-              "margin":20,
-              "width": 106,
-              "height": 50,
-              "borderRadius": 15,
-              "backgroundColor": "rgba(70, 83, 107, 255)",
+              "margin":8,
+              "width": 42,
+              "height": 42,
+              "borderRadius": 99,
+              "backgroundColor": "rgba(154, 167, 191, 255)",
             }
           } >
-          
-          <Text style = {[styles.button_style], {color: 'white', fontWeight: 'bold'}} >RESET</Text>
+          <Image style = {
+            {
+              "width": 20,
+              "height": 20,
+              // "marginBottom":60,
+              // "marginLeft":50
+            }
+            }
+            source = {
+              require('../assets/clear.png')
+            }/>
+          {/* <Text style = {styles.button_style} >RESET</Text> */}
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={{flex: 1, alignItems:'flex-start'}} onPress={pressHandler1}>
+        <TouchableOpacity  onPress={pressHandler1}>
           <View style = {
             {
               "alignItems": "center",
               "justifyContent":"center",
-              "margin":20,
-              "width": 106,
-              "height": 50,
-              "borderRadius": 15,
+              "margin":8,
+              "width": 170,
+              "height": 42,
+              "borderRadius": 99,
               "backgroundColor": "rgba(70, 83, 107, 255)",
             }
           } >
           
-          <Text style = {[styles.button_style], {color: 'white', fontWeight: 'bold'}} >SUBMIT</Text>
+          <Text style = {styles.button_style} >SUBMIT</Text>
           </View>
         </TouchableOpacity>
         </View>
@@ -422,8 +432,9 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   button_style: {
-    fontFamily: "NanumSquareOTF",
+    // fontFamily: "NanumSquareOTF",
     fontSize: 16,
+    // fontWeight: 'bold',
     textAlign: "center",
     color: "rgba(255, 255, 255, 255)",
   },
