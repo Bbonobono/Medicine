@@ -334,7 +334,7 @@ const UploadImage = ({route, navigation}) => {
         </View>
         {hasimage && <ScrollView style = {{height: 10, marginLeft: 40, marginRight: 40}} horizontal={true}>
           {image1 && <Image source={{ uri: image1 }} style={styles.img_style} resizeMethod='contain'/>}
-          {image2 && <Image source={{ uri: image2 }} style={styles.img_style} resizeMethod='contain'/>}
+          {image2 && <Image source={{ uri: image2 }} style={styles.img_style} onLoadEnd={() => alert('Swipe to preview image')} resizeMethod='contain'/>}
         </ScrollView>}
         {hasimage &&<View style={{marginBottom:30, flex: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
         <TouchableOpacity onPress={() => {setImage1(null); setImage2(null); setHasImage(false); setWhatImage(null)}}>

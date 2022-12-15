@@ -16,17 +16,18 @@ bh = Table('BH',meta,extend_existing=True,autoload=engine)
 med = Table('MED',meta,extend_existing=True,autoload=engine)
 info = Table('INFO',meta,extend_existing=True,autoload=engine)
 
-pk_num = 5
-
+pk_num = [1,2,3]
 @app.get("/")
 async def root():
-    query = engine.execute(select(med).where(med.c.PK == pk_num)).fetchall()
-    print(query)
-    info_query = engine.execute(select(info).where(info.c.PK == pk_num)).fetchone()
+    result = []
+    for pk in pk_num:
+        query = engine.execute(select(med).where(med.c.PK == pk)).fetchone()
+        # print(query)
+        info_query = engine.execute(select(info).where(info.c.PK == pk)).fetchone()
 
-    shape = engine.execute(select(my).where(my.c.PK == query.MY)).fetchone()
+        shape = engine.execute(select(my).where(my.c.PK == query.MY)).fetchone()
+        result.append({'PK':query.PK, 'NAME':info_query.NAME, 'MY':shape.MY, 'COLOR':query.COLOR, 'IMAGE':info_query.IMG, 'EFFECT':info_query.EFFECT, 'USAGE':info_query.USAGE})
     # select(info).where(info.c.PK == 0)
-    result = [{'PK':query.PK, 'NAME':info_query.NAME, 'MY':shape.MY, 'COLOR':query.COLOR, 'IMAGE':info_query.IMG, 'EFFECT':info_query.EFFECT, 'USAGE':info_query.USAGE}]
     return result
 
 

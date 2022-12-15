@@ -21,17 +21,17 @@ export default function Result({navigation}) {
       .finally(() => setLoading(false));
     },[])
     
-    const ListItem = ({item, name, shape, color, image}) => {
+    const ListItem = ({item}) => {
       return (
         <Pressable style={styles.listItem} onPress={() => DetailPage(item)}>
           <View style={styles.pillContainer}>
             <Image
-              source={{uri: image}}
+              source={{uri: item.IMAGE}}
               style={styles.listImage}
             />
             <View style={styles.pillContent}>
-              <Text style={{fontSize: 30, fontWeight: '700', marginBottom: 5}}>{name}</Text>
-              <Text style={{fontSize: 20, fontWeight: '300'}}>{shape} / {color}</Text>
+              <Text style={{fontSize: 30, fontWeight: '700', marginBottom: 5}}>{String(item.NAME).split('(')[0]}</Text>
+              <Text style={{fontSize: 20, fontWeight: '300'}}>{item.MY} / {item.COLOR}</Text>
             </View>
           </View>
           
@@ -57,15 +57,7 @@ export default function Result({navigation}) {
         (<FlatList
           data={data}
           ListHeaderComponent={ListHeaderComponent}
-          renderItem={({item}) => {
-            return <ListItem 
-                      item = {item}
-                      name = {item.NAME}
-                      shape = {item.MY}
-                      color = {item.COLOR}
-                      image = {item.IMAGE}
-                    />;
-          }}
+          renderItem={ListItem}
           keyExtractor={item => item.PK}
         />)}
       </SafeAreaView>
@@ -81,16 +73,17 @@ export default function Result({navigation}) {
     },
     listImage: {
       width: 120,
-      height: '100%',
+      // height: '100%',
+      height: 80,
       borderRadius: 10,
       alignItems: 'center',
       justifyContent: 'center',
     },
     listItem:{
       height : '100%',
-      marginBottom: 1,
+      marginBottom: 5,
       paddingHorizontal: 15,
-      // flex: 1,
+      flex: 1,
     },
     pillContainer: {
       flexDirection: 'row',

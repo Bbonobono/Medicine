@@ -15,7 +15,8 @@ const PillsDetail = ({image, name, effect, usage, style}) => {
             <ScrollView style={{padding: 20}}>
                 <View style={listItemStyle.menuView}>
                     <Text style={listItemStyle.menu}>의약품명</Text>
-                    <Text style={listItemStyle.pillName}>{name}</Text>
+                    <Text style={[listItemStyle.pillName, {paddingBottom: 0}]}>{String(name).split('(')[0]}</Text>
+                    <Text style={[listItemStyle.pillName, {paddingTop: 0}]}>{String('(')+String(name).split('(')[1]}</Text>
                 </View>
                 <View style={listItemStyle.menuView}>
                     <Text style={listItemStyle.menu}>효능 및 효과</Text>
