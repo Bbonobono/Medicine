@@ -210,7 +210,7 @@ class Predict():
       result['color'] = pred_cr
       result['text'] = pred_txt
 
-    sort_dic = sorted(temp_dic.items(), key=lambda x:x[1], reverse=True)[:10] # 조정해서 갯수
+    sort_dic = sorted(temp_dic.items(), key=lambda x:x[1], reverse=True)[:200] # 조정해서 갯수
     result = res.loc[[k for k,v in sort_dic]]
 
     return result

@@ -8,7 +8,8 @@ import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from 'react-n
 
 const UploadImage = ({route, navigation}) => {
   const pressHandler1 = () => {
-    navigation.navigate('Result');
+    // navigation.navigate('Result');
+    navigation.navigate('Result',{IMG:image1});
   }
   const pressCamera = () => {
     navigation.navigate('CameraPhoto');

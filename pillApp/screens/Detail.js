@@ -9,6 +9,7 @@ export default function Detail({route, navigation}) {
     console.log(pillItem);
 
     return (
+      <View style = {styles.container}>
       <ScreenContainer>
         <PillsDetail 
           name = {pillItem.pillItem.NAME}
@@ -18,6 +19,7 @@ export default function Detail({route, navigation}) {
           style={styles.listItem}
         />
       </ScreenContainer>
+      </View>
     );
   }
   
@@ -25,5 +27,10 @@ export default function Detail({route, navigation}) {
     listItem: {
       borderRadius: 0,
     },
-  
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
   });

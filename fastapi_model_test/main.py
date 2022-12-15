@@ -37,8 +37,8 @@ info = pd.read_sql_table('INFO', 'sqlite:///pillm_3.db')
 
 #
 @app.post('/prediction')
-async def prediction_route(file: UploadFile = File(...)):
-    contents = await file.read()
+async def prediction_route(image: UploadFile):
+    contents = await image.read()
     p = Predict(med)
     result_list = []
     prediction = p.predict_img(path = contents)
