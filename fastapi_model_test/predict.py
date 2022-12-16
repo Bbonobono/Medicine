@@ -123,7 +123,7 @@ class Predict():
         '''
         load models
         '''
-        if data is not None:
+        if data:
             self.set_data(data)
         self.my = my
         self.jh = jh
@@ -154,9 +154,9 @@ class Predict():
         mask = seg.predict(im_raw, verbose=0)
         im_seg = np.argmax(mask[0], axis=2).reshape(224, 224, 1) * im_raw[0]
         im = crop_segd(im_seg).reshape(-1, 224, 224, 3)
-        pred_my = np.argmax(self.my.predict(im, verbose=0))
-        pred_jh = np.argmax(self.jh.predict(im, verbose=0))
-        pred_bh = np.argmax(self.bh.predict(im, verbose=0))
+        pred_my = str(np.argmax(self.my.predict(im, verbose=0)))
+        pred_jh = str(np.argmax(self.jh.predict(im, verbose=0)))
+        pred_bh = str(np.argmax(self.bh.predict(im, verbose=0)))
         pred_cr = predict_hsv((im[0]*255).astype(np.uint8),self.color_data_path)
         # pred_cr = predict_hsv(load_image_into_numpy_array(path),self.color_data_path)
         pred_txt = ocr((im[0]*255).astype(np.uint8), pred_jh)
