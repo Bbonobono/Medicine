@@ -146,6 +146,7 @@ class Predict():
         output : predicted features in cat codes:(모양, 제형, 분할선, 색상) and dict(str):(식별문자)
         '''
         data = self.data.copy()
+        data = data.astype({'MY': 'string', 'JH': 'string', 'BH_F': 'string'})
         if not img and not path:
             raise Exception('img or path is needed')
             # img = Image.open(path)
