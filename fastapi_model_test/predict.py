@@ -119,11 +119,12 @@ class Predict():
         1: '마름모형',
         2: '반원형'}
     bh_dict = {2: 'x', 1: '-', 0: '+', 3: '기타'}
-    def __init__(self, data):
+    def __init__(self, data=None):
         '''
         load models
         '''
-        self.set_data(data)
+        if data:
+            self.set_data(data)
         self.my = my
         self.jh = jh
         self.bh = bh
